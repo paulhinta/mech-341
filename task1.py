@@ -25,14 +25,19 @@ collection=db['selected-data']      #connection that we are using
 #declare variables of math
 p = sp.Symbol("p")
 
-h2o = collection.find_one({"index":11})
-o2 = collection.find_one({"index":13})
-n2 = collection.find_one({"index":15})
+h2o_1000 = collection.find_one({"index":11})
+o2_1000 = collection.find_one({"index":13})
+n2_1000 = collection.find_one({"index":15})
 
-#critical phi
-p_t = p*enthalpy(h2o, 1000) + 3.76*enthalpy(n2, 1000) + (2-p)*enthalpy(o2, 1000)
-p_base = sp.solve(p_t, p)
-print(p_base)
+al2o3_s = collection.find_one({"index":2})
+al2o3_l = collection.find_one({"index":3})
 
+print(al2o3_s)
+print(al2o3_l)
+
+print(enthalpy(al2o3_s, 2327))
+print(enthalpy(al2o3_l, 2327))
+
+ers = []
 
 er = 0 #equivalence ratio
