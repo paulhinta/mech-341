@@ -22,7 +22,9 @@ client = pymongo.MongoClient(connect, tlsCAFile=ca)
 db = client['inputs']               #database that we are using
 collection=db['selected-data']      #connection that we are using
 
-#THERMO STUFF STARTS HERE
+'''
+THERMO STUFF STARTS HERE
+'''
 
 #declare variables of math
 p = sp.Symbol("p")
@@ -55,19 +57,20 @@ f1_o2 = collection.find_one({"index":13})                             #o2 instea
 
 T_aft = 0       #adiabatic flame temp (dynamic variable)
 
+#compute AFT
 while True:
     if er > 2:
         break
 
-    #fuel rich
+    #fuel rich case
     if er >= 1:
         T_aft = aft(fr_h2o, fr_n2, fr_h2, er)
     
-    #fuel lean, er > p_crit
+    #fuel lean, er > p_crit case
     elif er >= p_crit:
         T_aft = aft(f1_h2o, f1_n2, f1_o2, er)
 
-    #fuel lean, er < p_crit
+    #fuel lean, er < p_crit case
     else:
         T_aft = aft(h2o_1000, n2_1000, o2_1000, er)
 

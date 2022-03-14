@@ -4,10 +4,6 @@ from dotenv import load_dotenv      #loads secret environment variable (mongo pa
 import os                           #fetches password from environment
 import matplotlib.pyplot as plt
 
-#FILLS UP THE MONGODB WITH data for question 1, it can easily be accessed by running analysis.py
-
-#from calc_hf import calc            #side function to calculate hf
-
 load_dotenv()
 
 pw = os.getenv("PASSWORD")          #fetch pw from environment
@@ -31,3 +27,6 @@ y_axis = collection.find_one({"Axis":"Y"})["Data"]
 #Plot the question 1 data
 plt.plot(x_axis, y_axis)
 plt.show()
+'''
+TASK 2
+'''
