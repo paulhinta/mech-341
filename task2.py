@@ -34,25 +34,25 @@ al2o3   = collection.find_one({"index":0})
 h2      = collection.find_one({"index":7})
 h2o_g   = collection.find_one({"index":10})
 
-T = sp.Symbol("T", constant=False)      #temp
+T = sp.Symbol("T")      #temp
 p = sp.Symbol("p")      #phi
 
 #enthalpy of formation of general eqn
 def h_f(p, T):
-    return p*enthalpy_function(al2o3,T) + 3*p*enthalpy_function(h2,T) + 3*(1-p)*enthalpy_function(h2o_g,T) - 3*enthalpy_function(h2o_l,T) - 2*p*enthalpy_function(al,T)
+    #return p*al2o3["hf0 [J/mol]"] + 3*p*h2["hf0 [J/mol]"] + 3*(1-p)*h2o_g["hf0 [J/mol]"] - 3*h2o_l["hf0 [J/mol]"] - 2*p*al["hf0 [J/mol]"]
+    return p*enthalpy_function(al2o3,T) + 3*p*enthalpy_function(h2,T) + 3*(1-p)*enthalpy_function(h2o_g,T) - 3*h2o_l["hf0 [J/mol]"] - 2*p*al["hf0 [J/mol]"]
 
-#we need a second equation, thus we can use Antoine's relationship
-#water vapour occurs at T > 100C -> so use the second temp relationship
-def P_sat(T):
-    return 10**(8.14019 - (1810.94)/(T + 244.45))
+#Take constants for 99-374 Celsius bc water needs to be vapour (i.e. can't be low temp)
+#Dalton's Law: (n mol H2O/n mol gas)* P = Antoine's Law
+def P_dal(p, T):
+     return (10**(8.14019 - (1810.94)/(T + 244.485 -273.15)))*133.322  - 101300*(1-p)     #converted to Pa
+# def P_dal(p, T):
+#     return (10**(8.07131 - (1730.63)/(T + 233.4 -273.15)))*133.322  - 101300*(1-p)     #converted to Pa
 
-g = P_sat(T) - 760          #1 atm = 760 mmhg
-t_sat = nsolve(g, 300)      #initial guess 300C (numerical solve)
-t_sat = t_sat + 273.15      #saturation temp in K
+g = P_dal(p, T)          #1 atm
+h = h_f(p, T)
+k = (g, h)
 
-h = h_f(p, t_sat)           #sub saturation temperature into the enthalpy equation
+solution = nsolve(k, (p, T), (0.14, 373))
 
-p_crit = sp.solve(h, p)     #find the critical ER
-
-print(p_crit[0])            #p_crit ~ 0.227 for T_sat ~ 373 K
-print(t_sat)
+print("Equivalence ratio:  " + str(solution[0]) + ", Temperature (K): " + str(solution[1]))
