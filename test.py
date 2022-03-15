@@ -22,9 +22,6 @@ client = pymongo.MongoClient(connect, tlsCAFile=ca)
 db = client['inputs']               #database that we are using
 collection=db['selected-data']      #connection that we are using
 
-'''
-THERMO STUFF STARTS HERE
-'''
 for i in range(0,16):
     x = collection.find_one({"index":i})
     if x["T_min [K]"] > 298:

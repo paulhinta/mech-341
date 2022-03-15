@@ -29,11 +29,11 @@ THERMO STUFF STARTS HERE
 governing stoich eqn: 2*phi*Al + 3H2O (l) -> phi*Al2O3 + 3*phi*H2 + 3*(1-phi)*H2O (g)
 Now, T = 2327K (Fully melted point of Al2O3)
 '''
-al      = collection.find_one({"index":4})
+al      = collection.find_one({"index":5})
 h2o_l   = collection.find_one({"index":9})
-al2o3   = collection.find_one({"index":2})  #New properties of al2o3 @ 500K
-h2      = collection.find_one({"index":7})
-h2o_g   = collection.find_one({"index":10})
+al2o3   = collection.find_one({"index":3})  #New properties of al2o3 @ 2373; Aluminium is still solid but starting to melt here
+h2      = collection.find_one({"index":8})
+h2o_g   = collection.find_one({"index":11})
 
 T = 2327                 #Melting point of Al2O3
 p = sp.Symbol("p")       #phi
@@ -46,5 +46,7 @@ def h_f(p, T):
 h = h_f(p, T)
 sol = nsolve(h, 0.5)
 
-collection = db['q3']
+print(sol)
+
+collection = db['q4']
 collection.update_one({"index":0}, {"$set": {"phi":float(sol)}}, upsert=True)
