@@ -30,6 +30,7 @@ plt.show()
 '''
 TASK 2
 '''
+print("TASK 2")
 collection=db['q2']
 #Fetch q2 data from the database
 print(
@@ -40,12 +41,18 @@ print(
         round(collection.find_one({"index":1})["Temperature [K]"],2)
     )
 )
+print("\n")
 '''
 TASK 3
 '''
+print("TASK 3")
 collection=db['q3']
 print(
-    "The equivalence ratio, phi, such that the aluminium oxide is just starting to melt: " + str(
+    "The equivalence ratio, phi, such that the aluminium oxide is just starting to melt: phi = " + str(
         round(collection.find_one({"index":0})["phi"],4)
     )
 )
+print("\n")
+'''
+TASK 4
+'''
