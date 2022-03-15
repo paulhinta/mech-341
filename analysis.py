@@ -30,3 +30,22 @@ plt.show()
 '''
 TASK 2
 '''
+collection=db['q2']
+#Fetch q2 data from the database
+print(
+    "Considering the oxidation of aluminium with water, the equivalence ratio,phi, so that the produced water is saturated vapour is: phi = " + str(
+        round(collection.find_one({"index":0})["Equivalence Ratio"],4)
+    )
+    + "\nThis occurs at a temperature, T: T = " + str(
+        round(collection.find_one({"index":1})["Temperature [K]"],2)
+    )
+)
+'''
+TASK 3
+'''
+collection=db['q3']
+print(
+    "The equivalence ratio, phi, such that the aluminium oxide is just starting to melt: " + str(
+        round(collection.find_one({"index":0})["phi"],4)
+    )
+)

@@ -45,14 +45,16 @@ def h_f(p, T):
 #Take constants for 99-374 Celsius bc water needs to be vapour (i.e. can't be low temp)
 #Dalton's Law: (n mol H2O/n mol gas)* P = Antoine's Law
 def P_dal(p, T):
-     return (10**(8.14019 - (1810.94)/(T + 244.485 -273.15)))*133.322  - 101300*(1-p)     #converted to Pa
-# def P_dal(p, T):
-#     return (10**(8.07131 - (1730.63)/(T + 233.4 -273.15)))*133.322  - 101300*(1-p)     #converted to Pa
+     return (10**(8.14019 - (1810.94)/(T + 244.485 -273.15)))  - 760*(1-p)     #760 mmHg = 1 atm
 
-g = P_dal(p, T)          #1 atm
-h = h_f(p, T)
-k = (g, h)
+#2 equations in phi, T
+eqn1 = P_dal(p, T)      #Equation 1: equalizing the pressure via Dalton & Antoine
+eqn2 = h_f(p, T)        #Equation 2: enthalpy equation
+eqns = (eqn1, eqn2)
 
-solution = nsolve(k, (p, T), (0.14, 373))
+solution = nsolve(eqns, (p, T), (0.5, 373))
 
-print("Equivalence ratio:  " + str(solution[0]) + ", Temperature (K): " + str(solution[1]))
+collection=db['q2']
+
+collection.update_one({"index":0}, {"$set": {"Equivalence Ratio":float(solution[0])}}, upsert=True)
+collection.update_one({"index":1}, {"$set": {"Temperature [K]":float(solution[1])}}, upsert=True)
