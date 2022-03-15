@@ -27,15 +27,15 @@ collection=db['selected-data']      #connection that we are using
 THERMO STUFF STARTS HERE
 
 governing stoich eqn: 2*phi*Al + 3H2O (l) -> phi*Al2O3 + 3*phi*H2 + 3*(1-phi)*H2O (g)
-Now, T = 500K (Melting point of Al2O3)
+Now, T = 2327 (Melting point of Al2O3)
 '''
 al      = collection.find_one({"index":4})
 h2o_l   = collection.find_one({"index":9})
-al2o3   = collection.find_one({"index":1})  #New properties of al2o3 @ 500K
+al2o3   = collection.find_one({"index":2})  #New properties of al2o3 @ 1200K; Aluminium is still solid but starting to melt here
 h2      = collection.find_one({"index":7})
 h2o_g   = collection.find_one({"index":10})
 
-T = 500                 #Melting point of Al2O3
+T = 2327                 #Melting point of Al2O3
 p = sp.Symbol("p")      #phi
 
 #enthalpy of formation of general eqn
@@ -45,6 +45,8 @@ def h_f(p, T):
 
 h = h_f(p, T)
 sol = nsolve(h, 0.5)
+
+print(sol)
 
 collection = db['q3']
 collection.update_one({"index":0}, {"$set": {"phi":float(sol)}}, upsert=True)

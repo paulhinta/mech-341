@@ -41,7 +41,6 @@ print(
         round(collection.find_one({"index":1})["Temperature [K]"],2)
     )
 )
-print("\n")
 '''
 TASK 3
 '''
@@ -52,7 +51,7 @@ print(
         round(collection.find_one({"index":0})["phi"],4)
     )
 )
-print("\n")
 '''
 TASK 4
 '''
+print("TASK 4")
