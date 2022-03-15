@@ -26,7 +26,7 @@ collection=db['selected-data']      #connection that we are using
 '''
 THERMO STUFF STARTS HERE
 
-governing stoich eqn: 2*phi*Al + 3H2O (l) -> phi*Al2O3 + 3*phi*H2 + 3*(1-phi)*H2O (g)
+governing eqn: 2*phi*Al + 3H2O (l) -> phi*Al2O3 + 3*phi*H2 + 3*(1-phi)*H2O (g)
 Now, T = 2327K (Fully melted point of Al2O3)
 '''
 al      = collection.find_one({"index":5})
@@ -40,13 +40,18 @@ p = sp.Symbol("p")       #phi
 
 #enthalpy of formation of general eqn
 #for liquid water, sub maximum temp 373.15K
-def h_f(p, T):
+def fuel_lean(p, T):
     return p*enthalpy(al2o3,T) + 3*p*enthalpy(h2,T) + 3*(1-p)*enthalpy(h2o_g,T) - 3*h2o_l["hf0 [J/mol]"] - 2*p*al["hf0 [J/mol]"]
 
-h = h_f(p, T)
-sol = nsolve(h, 0.5)
+def fuel_rich(p, T):
+    return enthalpy(al2o3,T) + 2*(p-1)*enthalpy(al, T) +  3*enthalpy(h2,T) - 3*h2o_l["hf0 [J/mol]"]  - 2*p*al["hf0 [J/mol]"]
 
-print(sol)
+h = fuel_lean(p, T)
+sol1 = nsolve(h, 0.5)
+
+k = fuel_rich(p, T)
+sol2 = nsolve(k, 1)
 
 collection = db['q4']
-collection.update_one({"index":0}, {"$set": {"phi":float(sol)}}, upsert=True)
+collection.update_one({"index":0}, {"$set": {"phi":float(sol1)}}, upsert=True)
+collection.update_one({"index":1}, {"$set": {"phi":float(sol2)}}, upsert=True)

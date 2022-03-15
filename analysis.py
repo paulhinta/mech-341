@@ -48,8 +48,13 @@ TASK 3
 print("TASK 3")
 collection=db['q3']
 print(
-    "The equivalence ratio, phi, such that the aluminium oxide is just starting to melt: phi = " + str(
+    "The equivalence ratio, phi, such that the aluminium oxide is just starting to melt (Fuel Lean Case): phi = " + str(
         round(collection.find_one({"index":0})["phi"],4)
+    )
+)
+print(
+    "The equivalence ratio, phi, such that the aluminium oxide is just starting to melt (Fuel Rich Case): phi = " + str(
+        round(collection.find_one({"index":1})["phi"],4)
     )
 )
 '''
@@ -58,8 +63,13 @@ TASK 4
 print("TASK 4")
 collection=db['q4']
 print(
-    "The equivalence ratio, phi, such that the aluminium oxide is fully melted: phi = " + str(
+    "The equivalence ratio, phi, such that the aluminium oxide is fully melted (Fuel Lean Case): phi = " + str(
         round(collection.find_one({"index":0})["phi"],4)
+    )
+)
+print(
+    "The equivalence ratio, phi, such that the aluminium oxide is fully melted (Fuel Rich Case): phi = " + str(
+        round(collection.find_one({"index":1})["phi"],4)
     )
 )
 '''
@@ -68,7 +78,7 @@ TASK 5
 print("TASK 5")
 collection=db['q5']
 print(
-    "The Adiabatic Flame Temperature of the aluminium oxide, assuming the Al2O3 is liquid: ATF = " + str(
+    "The Adiabatic Flame Temperature of the aluminium oxide, assuming the Al2O3 is liquid: AFT = " + str(
         round(collection.find_one({"index": 0})["AFT [K]"],2)
     )
 )

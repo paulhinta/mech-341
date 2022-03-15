@@ -3,7 +3,7 @@ import pymongo                      #python + mongo
 import certifi                      #to allow user certification when connecting to Mongo
 from dotenv import load_dotenv      #loads secret environment variable (mongo password)
 import os                           #fetches password from environment
-from enthalpy import enthalpy, aft_t5
+from enthalpy import enthalpy, enthalpy_function
 import sympy as sp
 from sympy import nsolve
 
@@ -39,7 +39,8 @@ T = sp.Symbol("T")
 #enthalpy of formation of general eqn
 #for liquid water, sub maximum temp 373.15K
 #AFT as f(T)
-f = aft_t5(al, h2o_l, al2o3, h2, h2o_g, T)
+f = enthalpy_function(al2o3, T) + 3*enthalpy_function(h2, T) + 3*enthalpy_function(h2o_g, T) - 2*al["hf0 [J/mol]"] - 6*h2o_l["hf0 [J/mol]"]
+#f = enthalpy_function(al2o3, T) + 3*enthalpy_function(h2, T) - 3*h2o_l["hf0 [J/mol]"]
 
 #numerical solution
 sol = nsolve(f, 2327)

@@ -52,12 +52,3 @@ def aft_t1(water:dict, nitrogen:dict, extra:dict,  er:float=1.0):
     T_aft = nsolve(eq, 1)
 
     return T_aft
-
-#governing stoich eqn: 2*Al + 6H2O (l) -> Al2O3 + 3*H2 + 3*H2O (g)
-def aft_t5(al:dict, water:dict, oxide:dict, hydro:dict, vapour:dict, temp:float):
-
-    #return a function in T to solve aft
-    def f(T):
-        return enthalpy_function(oxide, T) + 3*enthalpy_function(hydro, T) + 3*enthalpy_function(vapour, T) - 2*al["hf0 [J/mol]"] - 6*water["hf0 [J/mol]"]
-
-    return f(temp)
