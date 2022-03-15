@@ -4,7 +4,7 @@ from dotenv import load_dotenv      #loads secret environment variable (mongo pa
 import os                           #fetches password from environment
 import sympy as sp
 import numpy as np
-from enthalpy import enthalpy, aft       #function to calculate enthalpy, adiabatic flame temp
+from enthalpy import enthalpy, aft_t1       #function to calculate enthalpy, adiabatic flame temp
 
 #FILLS UP THE MONGODB WITH data for question 1, it can easily be accessed by running analysis.py
 
@@ -64,15 +64,15 @@ while True:
 
     #fuel rich case
     if er >= 1:
-        T_aft = aft(fr_h2o, fr_n2, fr_h2, er)
+        T_aft = aft_t1(fr_h2o, fr_n2, fr_h2, er)
     
     #fuel lean, er > p_crit case
     elif er >= p_crit:
-        T_aft = aft(f1_h2o, f1_n2, f1_o2, er)
+        T_aft = aft_t1(f1_h2o, f1_n2, f1_o2, er)
 
     #fuel lean, er < p_crit case
     else:
-        T_aft = aft(h2o_1000, n2_1000, o2_1000, er)
+        T_aft = aft_t1(h2o_1000, n2_1000, o2_1000, er)
 
     afts.append(float(T_aft))
     ers.append(er)

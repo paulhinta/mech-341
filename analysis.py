@@ -1,3 +1,4 @@
+from calendar import c
 import pymongo                      #python + mongo
 import certifi                      #to allow user certification when connecting to Mongo
 from dotenv import load_dotenv      #loads secret environment variable (mongo password)
@@ -55,3 +56,19 @@ print(
 TASK 4
 '''
 print("TASK 4")
+collection=db['q4']
+print(
+    "The equivalence ratio, phi, such that the aluminium oxide is fully melted: phi = " + str(
+        round(collection.find_one({"index":0})["phi"],4)
+    )
+)
+'''
+TASK 5
+'''
+print("TASK 5")
+collection=db['q5']
+print(
+    "The Adiabatic Flame Temperature of the aluminium oxide, assuming the Al2O3 is liquid: ATF = " + str(
+        round(collection.find_one({"index": 0})["AFT [K]"],2)
+    )
+)
