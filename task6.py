@@ -26,7 +26,7 @@ collection=db['selected-data']      #connection that we are using
 '''
 THERMO STUFF STARTS HERE
 
-governing stoich eqn: 2Al + 3H2O (l) -> Al2O3 + 3H2 (g)
+governing stoich eqn: 2*phi*Al + 3H2O (l) -> Al2O3 + 3H2 (g) + 2*(phi-1)*Al (l)
 Now, T = 2327K (Fully melted point of Al2O3)
 '''
 al      = collection.find_one({"index":5})
@@ -35,15 +35,15 @@ al2o3   = collection.find_one({"index":3})  #New properties of al2o3 @ 2373; Alu
 h2      = collection.find_one({"index":8})
 h2o_g   = collection.find_one({"index":11})
 
-T = sp.Symbol("T")                 
+T = sp.Symbol("T")
+p = 1.5     #equivalence ratio (given)                 
 #enthalpy of formation of general eqn
 #for liquid water, sub maximum temp 373.15K
 #AFT as f(T)
-f = enthalpy_function(al2o3, T) + 3*enthalpy_function(h2, T) - 2*al["hf0 [J/mol]"] - 3*h2o_l["hf0 [J/mol]"]
-#f = enthalpy_function(al2o3, T) + 3*enthalpy_function(h2, T) - 3*h2o_l["hf0 [J/mol]"]
+f = enthalpy_function(al2o3, T) + 3*enthalpy_function(h2, T) + 2*(p-1)*enthalpy_function(al, T) - 2*p*al["hf0 [J/mol]"] - 3*h2o_l["hf0 [J/mol]"]
 
 #numerical solution
 sol = nsolve(f, 2327)
 
-collection = db['q5']
+collection = db['q6']
 collection.update_one({"index":0}, {"$set": {"AFT [K]":float(sol)}}, upsert=True)

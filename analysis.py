@@ -82,3 +82,13 @@ print(
         round(collection.find_one({"index": 0})["AFT [K]"],2)
     )
 )
+'''
+TASK 6
+'''
+print("TASK 6")
+collection=db['q6']
+print(
+    "The Adiabatic Flame Temperature of the aluminium oxide, with an equivalence ratio of 1.5: AFT = " + str(
+        round(collection.find_one({"index": 0})["AFT [K]"],2)
+    )
+)
