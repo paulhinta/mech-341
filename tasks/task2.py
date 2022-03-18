@@ -1,9 +1,12 @@
+import sys
+sys.path.append('../')               #allow imports from one directory up
+
 from gc import collect
 import pymongo                      #python + mongo
 import certifi                      #to allow user certification when connecting to Mongo
 from dotenv import load_dotenv      #loads secret environment variable (mongo password)
 import os                           #fetches password from environment
-from enthalpy import enthalpy, enthalpy_function
+from functions.enthalpy import enthalpy, enthalpy_function
 import sympy as sp
 from sympy import nsolve
 

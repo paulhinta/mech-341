@@ -1,9 +1,12 @@
+import sys
+sys.path.append('../')               #allow imports from one directory up
+
 from gc import collect
 import pymongo                      #python + mongo
 import certifi                      #to allow user certification when connecting to Mongo
 from dotenv import load_dotenv      #loads secret environment variable (mongo password)
 import os                           #fetches password from environment
-from enthalpy import enthalpy, enthalpy_function
+from functions.enthalpy import enthalpy
 import sympy as sp
 from sympy import nsolve
 
@@ -26,7 +29,7 @@ collection=db['selected-data']      #connection that we are using
 '''
 THERMO STUFF STARTS HERE
 
-governing stoich eqn: 2*phi*Al + 3H2O (l) -> Al2O3 + 3H2 (g) + 2*(phi-1)*Al (l)
+governing eqn: 2*phi*Al + 3H2O (l) -> phi*Al2O3 + 3*phi*H2 + 3*(1-phi)*H2O (g)
 Now, T = 2327K (Fully melted point of Al2O3)
 '''
 al      = collection.find_one({"index":5})
@@ -35,15 +38,23 @@ al2o3   = collection.find_one({"index":3})  #New properties of al2o3 @ 2373; Alu
 h2      = collection.find_one({"index":8})
 h2o_g   = collection.find_one({"index":11})
 
-T = sp.Symbol("T")
-p = 1.5     #equivalence ratio (given)                 
+T = 2327                 #Melting point of Al2O3
+p = sp.Symbol("p")       #phi
+
 #enthalpy of formation of general eqn
 #for liquid water, sub maximum temp 373.15K
-#AFT as f(T)
-f = enthalpy_function(al2o3, T) + 3*enthalpy_function(h2, T) + 2*(p-1)*enthalpy_function(al, T) - 2*p*al["hf0 [J/mol]"] - 3*h2o_l["hf0 [J/mol]"]
+def fuel_lean(p, T):
+    return p*enthalpy(al2o3,T) + 3*p*enthalpy(h2,T) + 3*(1-p)*enthalpy(h2o_g,T) - 3*h2o_l["hf0 [J/mol]"] - 2*p*al["hf0 [J/mol]"]
 
-#numerical solution
-sol = nsolve(f, 2327)
+def fuel_rich(p, T):
+    return enthalpy(al2o3,T) + 2*(p-1)*enthalpy(al, T) +  3*enthalpy(h2,T) - 3*h2o_l["hf0 [J/mol]"]  - 2*p*al["hf0 [J/mol]"]
 
-collection = db['q6']
-collection.update_one({"index":0}, {"$set": {"AFT [K]":float(sol)}}, upsert=True)
+h = fuel_lean(p, T)
+sol1 = nsolve(h, 0.5)
+
+k = fuel_rich(p, T)
+sol2 = nsolve(k, 1)
+
+collection = db['q4']
+collection.update_one({"index":0}, {"$set": {"phi":float(sol1)}}, upsert=True)
+collection.update_one({"index":1}, {"$set": {"phi":float(sol2)}}, upsert=True)

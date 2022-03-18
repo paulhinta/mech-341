@@ -1,10 +1,13 @@
+import sys
+sys.path.append('../')               #allow imports from one directory up
+
 import pymongo                      #python + mongo
 import certifi                      #to allow user certification when connecting to Mongo
 from dotenv import load_dotenv      #loads secret environment variable (mongo password)
 import os                           #fetches password from environment
 import sympy as sp
 import numpy as np
-from enthalpy import enthalpy, aft_t1       #function to calculate enthalpy, adiabatic flame temp
+from functions.enthalpy import enthalpy, aft_t1       #function to calculate enthalpy, adiabatic flame temp
 
 #FILLS UP THE MONGODB WITH data for question 1, it can easily be accessed by running analysis.py
 
