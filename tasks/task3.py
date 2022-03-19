@@ -62,4 +62,4 @@ collection.update_one({"index":1}, {"$set": {"phi":float(sol2)}}, upsert=True)
 
 #place in a collection for analysis in question 8
 collection=db['q8']
-collection.update_one({"index":1}, {"$set": {"Equivalence Ratio":float(sol1[0]), "Temperature [K]": 2327}}, upsert=True)
+collection.update_one({"index":1}, {"$set": {"Equivalence Ratio":float(sol1), "Temperature [K]": 2327}}, upsert=True)
