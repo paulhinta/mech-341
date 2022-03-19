@@ -38,11 +38,19 @@ print("TASK 2")
 collection=db['q2']
 #Fetch q2 data from the database
 print(
-    "Considering the oxidation of aluminium with water, the equivalence ratio,phi, so that the produced water is saturated vapour is: phi = " + str(
+    "Considering the oxidation of aluminium with water and using the higher Antoine Coefficients, the equivalence ratio,phi, so that the produced water is saturated vapour is: phi = " + str(
         round(collection.find_one({"index":0})["Equivalence Ratio"],4)
     )
     + "\nThis occurs at a temperature, T: T = " + str(
         round(collection.find_one({"index":1})["Temperature [K]"],2)
+    )
+)
+print(
+    "Considering the oxidation of aluminium with water and using the lower Antoine Coefficients, the equivalence ratio,phi, so that the produced water is saturated vapour is: phi = " + str(
+        round(collection.find_one({"index":0})["Equivalence Ratio (Alternate)"],4)
+    )
+    + "\nThis occurs at a temperature, T: T = " + str(
+        round(collection.find_one({"index":1})["Temperature (Alternate) [K]"],2)
     )
 )
 '''

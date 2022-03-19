@@ -50,3 +50,7 @@ sol = nsolve(f, 2327)
 
 collection = db['q6']
 collection.update_one({"index":0}, {"$set": {"AFT [K]":float(sol)}}, upsert=True)
+
+#place in a collection for analysis in question 8
+collection=db['q8']
+collection.update_one({"index":4}, {"$set": {"Equivalence Ratio":1.5, "Temperature [K]": float(sol)}}, upsert=True)

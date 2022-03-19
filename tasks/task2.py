@@ -50,14 +50,25 @@ def h_f(p, T):
 def P_dal(p, T):
      return (10**(8.14019 - (1810.94)/(T + 244.485 -273.15)))  - 760*(1-p)     #760 mmHg = 1 atm
 
+#use lower values
+def P_dal_low(p, T):
+    return (10**(8.07131 - (1730.63)/(T + 233.426 -273.15)))  - 760*(1-p)
+
 #2 equations in phi, T
 eqn1 = P_dal(p, T)      #Equation 1: equalizing the pressure via Dalton & Antoine
 eqn2 = h_f(p, T)        #Equation 2: enthalpy equation
+eqn3 = P_dal_low(p,T)
 eqns = (eqn1, eqn2)
+eqns_alt = (eqn3, eqn2)
 
 solution = nsolve(eqns, (p, T), (0.5, 373))
+alternate_solution = nsolve(eqns, (p, T), (0.5, 373))
 
 collection=db['q2']
 
-collection.update_one({"index":0}, {"$set": {"Equivalence Ratio":float(solution[0])}}, upsert=True)
-collection.update_one({"index":1}, {"$set": {"Temperature [K]":float(solution[1])}}, upsert=True)
+collection.update_one({"index":0}, {"$set": {"Equivalence Ratio":float(solution[0]), "Equivalence Ratio (Alternate)":float(alternate_solution[0])}}, upsert=True)
+collection.update_one({"index":1}, {"$set": {"Temperature [K]":float(solution[1]), "Temperature (Alternate) [K]":float(alternate_solution[1])}}, upsert=True)
+
+#place in a collection for analysis in question 8
+collection=db['q8']
+collection.update_one({"index":0}, {"$set": {"Equivalence Ratio":float(solution[0]), "Temperature [K]": float(solution[1])}}, upsert=True)
