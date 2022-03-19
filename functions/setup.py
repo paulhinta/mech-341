@@ -1,4 +1,3 @@
-from imp import cache_from_source
 #This python scripts sets up a Mongo database with all of the data from the selected_data csv
 #We do this because it's a lot faster to use Mongo than it is to read from a csv every time
 

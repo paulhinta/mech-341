@@ -28,7 +28,6 @@ collection=db['selected-data']      #connection that we are using
 '''
 THERMO STUFF STARTS HERE
 '''
-
 #declare variables of math
 p = sp.Symbol("p")
 
@@ -85,3 +84,4 @@ while True:
 collection = db['q1']
 collection.update_one({"index":0}, {"$set": {"Axis":"X", "Data":ers}}, upsert=True)
 collection.update_one({"index":1}, {"$set": {"Axis":"Y", "Data":afts}}, upsert=True)
+collection.update_one({"index":2}, {"$set": {"Phi_crit":float(p_crit)}}, upsert=True)
