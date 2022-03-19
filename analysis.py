@@ -27,6 +27,9 @@ y_axis = collection.find_one({"Axis":"Y"})["Data"]
 
 #Plot the question 1 data
 plt.plot(x_axis, y_axis)
+plt.title("AFT vs Equivalence Ratio for the combustion of H2 with air")
+plt.ylabel("Adiabatic Flame Temperature [K]")
+plt.xlabel("Equivalence Ratio [-]")
 plt.show()
 '''
 TASK 2

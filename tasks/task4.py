@@ -34,7 +34,7 @@ Now, T = 2327K (Fully melted point of Al2O3)
 '''
 al      = collection.find_one({"index":5})
 h2o_l   = collection.find_one({"index":9})
-al2o3   = collection.find_one({"index":3})  #New properties of al2o3 @ 2373; Aluminium is still solid but starting to melt here
+al2o3   = collection.find_one({"index":3})  #New properties of al2o3 @ 2373; Aluminium is liquid and begins to melt here
 h2      = collection.find_one({"index":8})
 h2o_g   = collection.find_one({"index":11})
 
