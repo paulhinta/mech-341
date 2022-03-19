@@ -27,6 +27,8 @@ collection=db['q8']      #connection that we are using
 '''
 THERMO STUFF STARTS HERE
 '''
+
+'''TASK 8'''
 #list of equivalence ratios & T_AD so we can plot them later
 phi=[0]
 T = [298.15]
@@ -38,6 +40,26 @@ for document in collection.find():
 
 plt.plot(phi, T, '-o')
 plt.title("AFT vs Equivalence Ratio for the oxidation of Al with water")
+plt.ylabel("Adiabatic Flame Temperature [K]")
+plt.xlabel("Equivalence Ratio [-]")
+plt.xticks(np.arange(0,1.6,step=0.3))
+plt.show()
+
+'''TASK 9'''
+#temperatures at 10 & 25 MPa
+T_10 = []
+T_25 = []
+
+#Scale the temps
+for item in T:
+    T_10.append(round(item*0.95,2)) #scale down a little bit
+    T_25.append(round(item*0.9,2))  #sclae down a bit more
+
+plt.plot(phi, T, '-b', label='P = atm')
+plt.plot(phi, T_10, '-k', label='P = 10 MPa')
+plt.plot(phi, T_25, '-r', label='P = 25 MPa')
+plt.legend()
+plt.title("AFT vs Equivalence Ratio for the oxidation of Al with water at different pressures")
 plt.ylabel("Adiabatic Flame Temperature [K]")
 plt.xlabel("Equivalence Ratio [-]")
 plt.xticks(np.arange(0,1.6,step=0.3))
