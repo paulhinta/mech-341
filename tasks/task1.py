@@ -37,7 +37,7 @@ o2_1000 = collection.find_one({"index":12})
 n2_1000 = collection.find_one({"index":14})
 
 #critical point phi:
-g = 2*p*enthalpy(h2o_1000, 1000) + 3.76*enthalpy(n2_1000, 1000) + 2*(1-p)*enthalpy(o2_1000, 1000)
+g = 2*p*enthalpy(h2o_1000, 1000) + 3.76*enthalpy(n2_1000, 1000) + (1-p)*enthalpy(o2_1000, 1000)
 p_crit = sp.solve(g, p)[0]
 
 ers = []

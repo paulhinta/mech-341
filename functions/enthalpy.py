@@ -43,7 +43,7 @@ def aft_t1(water:dict, nitrogen:dict, extra:dict,  er:float=1.0):
 
     #sub the enthalpy as a function of T
     def f(T):
-        return 2*er_2*enthalpy_function(water, T) + 3.76*enthalpy_function(nitrogen, T) + abs(2*(er - 1))*enthalpy_function(extra, T)
+        return 2*er_2*enthalpy_function(water, T) + 3.76*enthalpy_function(nitrogen, T) + abs((er - 1))*enthalpy_function(extra, T)
     
     eq = f(T)
 
