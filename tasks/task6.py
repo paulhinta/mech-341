@@ -25,16 +25,17 @@ ca = certifi.where()                #mongo connection certificate
 client = pymongo.MongoClient(connect, tlsCAFile=ca)
 db = client['inputs']               #database that we are using
 collection=db['selected-data']      #connection that we are using
-
 '''
 THERMO STUFF STARTS HERE
 
-governing stoich eqn: 2*phi*Al + 3H2O (l) -> Al2O3 + 3H2 (g) + 2*(phi-1)*Al (l)
+governing stoich eqn: 2*phi*Al + 3H2O (l) -> Al2O3 + 3H2 (g) + 2*(phi-1)*Al (saturated liquid)
+h_{Al, saturated liquid} = hf_{liquid @ 2743} + h_{gas, T} - h_{gas, 2743}
 Now, T = 2327K (Fully melted point of Al2O3)
 '''
-al      = collection.find_one({"index":5})
+al_l    = collection.find_one({"index":5})  #liquid aluminium
+al_g    = collection.find_one({"index":6})  #gaseous aluminium
 h2o_l   = collection.find_one({"index":9})
-al2o3   = collection.find_one({"index":3})  #New properties of al2o3 @ 2373; Aluminium is liquid and begins to melt here
+al2o3   = collection.find_one({"index":3})  
 h2      = collection.find_one({"index":8})
 h2o_g   = collection.find_one({"index":11})
 
@@ -43,13 +44,17 @@ p = 1.5     #equivalence ratio (given)
 #enthalpy of formation of general eqn
 #for liquid water, sub maximum temp 373.15K
 #AFT as f(T)
-f = enthalpy_function(al2o3, T) + 3*enthalpy_function(h2, T) + 2*(p-1)*enthalpy_function(al, T) - 2*p*al["hf0 [J/mol]"] - 3*h2o_l["hf0 [J/mol]"]
+f = enthalpy_function(al2o3, T) + 3*enthalpy_function(h2, T) + 2*(p-1)*enthalpy(al_l, 2743) + 2*(p-1)*enthalpy_function(al_g, T) - 2*(p-1)*enthalpy(al_g, 2743) - 2*p*al_l["hf0 [J/mol]"] - 3*h2o_l["hf0 [J/mol]"]
 
 #numerical solution
 sol = nsolve(f, 2327)
 
 collection = db['q6']
 collection.update_one({"index":0}, {"$set": {"AFT [K]":float(sol)}}, upsert=True)
+
+#Calculate the quality
+quality = (enthalpy(al_l, sol) - enthalpy(al_l, 2743))/(enthalpy(al_g, sol) - enthalpy(al_l, 2743))
+collection.update_one({"index":1}, {"$set": {"quality":float(quality)}}, upsert=True)
 
 #place in a collection for analysis in question 8
 collection=db['q8']

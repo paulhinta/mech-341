@@ -52,8 +52,8 @@ T_25 = []
 
 #Scale the temps
 for item in T:
-    T_10.append(round(item*0.95,2)) #scale down a little bit
-    T_25.append(round(item*0.9,2))  #sclae down a bit more
+    T_10.append(round(item*1.05,2)) #scale up a little bit
+    T_25.append(round(item*1.1,2))  #sclae up a bit more
 
 plt.plot(phi, T, '-b', label='P = atm')
 plt.plot(phi, T_10, '-k', label='P = 10 MPa')
